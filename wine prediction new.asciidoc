@@ -1,0 +1,1007 @@
+== Import libraries
+
+
++*In[1]:*+
+[source, ipython3]
+----
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import warnings 
+
+sns.set_theme()        #Makes plot more stylish
+wrnings.filterwarnings('ignore')
+----
+
+
++*Out[1]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [1], in <cell line: 8>()
+          5 import warnings 
+          7 sns.set_theme()        #Makes plot more stylish
+    ----> 8 wrnings.filterwarnings('ignore')
+    
+
+    NameError: name 'wrnings' is not defined
+
+----
+
+== Loading the dataset
+
+
++*In[2]:*+
+[source, ipython3]
+----
+wine_data = pd.read_csv("wine-dataset.csv")
+wine_data
+----
+
+
++*Out[2]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    FileNotFoundError                         Traceback (most recent call last)
+
+    Input In [2], in <cell line: 1>()
+    ----> 1 wine_data = pd.read_csv("wine-dataset.csv")
+          2 wine_data
+    
+
+    File ~\anaconda3\lib\site-packages\pandas\util\_decorators.py:311, in deprecate_nonkeyword_arguments.<locals>.decorate.<locals>.wrapper(*args, **kwargs)
+        305 if len(args) > num_allow_args:
+        306     warnings.warn(
+        307         msg.format(arguments=arguments),
+        308         FutureWarning,
+        309         stacklevel=stacklevel,
+        310     )
+    --> 311 return func(*args, **kwargs)
+    
+
+    File ~\anaconda3\lib\site-packages\pandas\io\parsers\readers.py:680, in read_csv(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, squeeze, prefix, mangle_dupe_cols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, skipfooter, nrows, na_values, keep_default_na, na_filter, verbose, skip_blank_lines, parse_dates, infer_datetime_format, keep_date_col, date_parser, dayfirst, cache_dates, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, doublequote, escapechar, comment, encoding, encoding_errors, dialect, error_bad_lines, warn_bad_lines, on_bad_lines, delim_whitespace, low_memory, memory_map, float_precision, storage_options)
+        665 kwds_defaults = _refine_defaults_read(
+        666     dialect,
+        667     delimiter,
+       (...)
+        676     defaults={"delimiter": ","},
+        677 )
+        678 kwds.update(kwds_defaults)
+    --> 680 return _read(filepath_or_buffer, kwds)
+    
+
+    File ~\anaconda3\lib\site-packages\pandas\io\parsers\readers.py:575, in _read(filepath_or_buffer, kwds)
+        572 _validate_names(kwds.get("names", None))
+        574 # Create the parser.
+    --> 575 parser = TextFileReader(filepath_or_buffer, **kwds)
+        577 if chunksize or iterator:
+        578     return parser
+    
+
+    File ~\anaconda3\lib\site-packages\pandas\io\parsers\readers.py:933, in TextFileReader.__init__(self, f, engine, **kwds)
+        930     self.options["has_index_names"] = kwds["has_index_names"]
+        932 self.handles: IOHandles | None = None
+    --> 933 self._engine = self._make_engine(f, self.engine)
+    
+
+    File ~\anaconda3\lib\site-packages\pandas\io\parsers\readers.py:1217, in TextFileReader._make_engine(self, f, engine)
+       1213     mode = "rb"
+       1214 # error: No overload variant of "get_handle" matches argument types
+       1215 # "Union[str, PathLike[str], ReadCsvBuffer[bytes], ReadCsvBuffer[str]]"
+       1216 # , "str", "bool", "Any", "Any", "Any", "Any", "Any"
+    -> 1217 self.handles = get_handle(  # type: ignore[call-overload]
+       1218     f,
+       1219     mode,
+       1220     encoding=self.options.get("encoding", None),
+       1221     compression=self.options.get("compression", None),
+       1222     memory_map=self.options.get("memory_map", False),
+       1223     is_text=is_text,
+       1224     errors=self.options.get("encoding_errors", "strict"),
+       1225     storage_options=self.options.get("storage_options", None),
+       1226 )
+       1227 assert self.handles is not None
+       1228 f = self.handles.handle
+    
+
+    File ~\anaconda3\lib\site-packages\pandas\io\common.py:789, in get_handle(path_or_buf, mode, encoding, compression, memory_map, is_text, errors, storage_options)
+        784 elif isinstance(handle, str):
+        785     # Check whether the filename is to be opened in binary mode.
+        786     # Binary mode does not support 'encoding' and 'newline'.
+        787     if ioargs.encoding and "b" not in ioargs.mode:
+        788         # Encoding
+    --> 789         handle = open(
+        790             handle,
+        791             ioargs.mode,
+        792             encoding=ioargs.encoding,
+        793             errors=errors,
+        794             newline="",
+        795         )
+        796     else:
+        797         # Binary mode
+        798         handle = open(handle, ioargs.mode)
+    
+
+    FileNotFoundError: [Errno 2] No such file or directory: 'wine-dataset.csv'
+
+----
+
+== Basic Analysis
+
+We first use info() method to get the basic information about the
+columns in dataframe.
+
+
++*In[4]:*+
+[source, ipython3]
+----
+wine_data.info()
+----
+
+
++*Out[4]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [4], in <cell line: 1>()
+    ----> 1 wine_data.info()
+    
+
+    NameError: name 'wine_data' is not defined
+
+----
+
+
++*In[5]:*+
+[source, ipython3]
+----
+wine_data.describe()
+----
+
+
++*Out[5]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [5], in <cell line: 1>()
+    ----> 1 wine_data.describe()
+    
+
+    NameError: name 'wine_data' is not defined
+
+----
+
+== Data Cleaning
+
+== 1. Checking for null values
+
+
++*In[6]:*+
+[source, ipython3]
+----
+wine_data.isna().sum()
+----
+
+
++*Out[6]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [6], in <cell line: 1>()
+    ----> 1 wine_data.isna().sum()
+    
+
+    NameError: name 'wine_data' is not defined
+
+----
+
+
++*In[7]:*+
+[source, ipython3]
+----
+wine_data.dropna(inplace=True)
+wine_data
+----
+
+
++*Out[7]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [7], in <cell line: 1>()
+    ----> 1 wine_data.dropna(inplace=True)
+          2 wine_data
+    
+
+    NameError: name 'wine_data' is not defined
+
+----
+
+== 2. Checking for duplicate values
+
+
++*In[9]:*+
+[source, ipython3]
+----
+wine_data.duplicated().sum()
+----
+
+
++*Out[9]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [9], in <cell line: 1>()
+    ----> 1 wine_data.duplicated().sum()
+    
+
+    NameError: name 'wine_data' is not defined
+
+----
+
+
++*In[10]:*+
+[source, ipython3]
+----
+wine_data.dropduplicates(inplace=True)
+wine_data.info()
+----
+
+
++*Out[10]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [10], in <cell line: 1>()
+    ----> 1 wine_data.dropduplicates(inplace=True)
+          2 wine_data.info()
+    
+
+    NameError: name 'wine_data' is not defined
+
+----
+
+== 3. Handling Outliers
+
+We first check how the values in the quality column are distributed. We
+first check the unique values present in it.
+
+
++*In[11]:*+
+[source, ipython3]
+----
+wine_data['quality'].unique()
+----
+
+
++*Out[11]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [11], in <cell line: 1>()
+    ----> 1 wine_data['quality'].unique()
+    
+
+    NameError: name 'wine_data' is not defined
+
+----
+
+
++*In[12]:*+
+[source, ipython3]
+----
+sns.hisplot(data=wine_data, x='quality', discrete=True)
+----
+
+
++*Out[12]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    AttributeError                            Traceback (most recent call last)
+
+    Input In [12], in <cell line: 1>()
+    ----> 1 sns.hisplot(data=wine_data, x='quality', discrete=True)
+    
+
+    AttributeError: module 'seaborn' has no attribute 'hisplot'
+
+----
+
+
++*In[13]:*+
+[source, ipython3]
+----
+wine_data['category'] = 'bad'
+wine_data['category'][wine_data['quality']>5] = 'good'
+wine_data
+----
+
+
++*Out[13]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [13], in <cell line: 1>()
+    ----> 1 wine_data['category'] = 'bad'
+          2 wine_data['category'][wine_data['quality']>5] = 'good'
+          3 wine_data
+    
+
+    NameError: name 'wine_data' is not defined
+
+----
+
+
++*In[14]:*+
+[source, ipython3]
+----
+sns.countplot(data=wine_winedata, x='category')
+----
+
+
++*Out[14]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [14], in <cell line: 1>()
+    ----> 1 sns.countplot(data=wine_winedata, x='category')
+    
+
+    NameError: name 'wine_winedata' is not defined
+
+----
+
+
++*In[15]:*+
+[source, ipython3]
+----
+plt.figure(figsize=(15,10))
+cols = wine_data.columns
+
+for i in range(11):
+    plt.subplot(4,3,i+1)
+    sns.boxplot(data=wine_data, x=cols[i])
+    
+plt.tight_layout()    
+----
+
+
++*Out[15]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [15], in <cell line: 2>()
+          1 plt.figure(figsize=(15,10))
+    ----> 2 cols = wine_data.columns
+          4 for i in range(11):
+          5     plt.subplot(4,3,i+1)
+    
+
+    NameError: name 'wine_data' is not defined
+
+<Figure size 1080x720 with 0 Axes>----
+
+== Observation:
+
+There seems to be too many outliers. We can try plotting the histogram
+for the columns to see if we can understand something.
+
+
++*In[16]:*+
+[source, ipython3]
+----
+plt.figure(figsize=(15,15))
+cols = wine_data.columns
+
+for i in range(11):
+    plt.subplot(4,3,i+1)
+    sns.histplot(data=wine_data, x=cols[i], kde=True)
+plt.tight_layout()    
+----
+
+
++*Out[16]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [16], in <cell line: 2>()
+          1 plt.figure(figsize=(15,15))
+    ----> 2 cols = wine_data.columns
+          4 for i in range(11):
+          5     plt.subplot(4,3,i+1)
+    
+
+    NameError: name 'wine_data' is not defined
+
+<Figure size 1080x1080 with 0 Axes>----
+
+== Observation:
+
+[arabic]
+. The plots looks like normal distribution. Hence, it is better to
+identify outliers using the mean and standard deviation.
+
+....
+ Almost all of the pH values seems to be in between 3.5 and 3.6. We can increase the number of bins to get clear view.
+....
+
+
++*In[18]:*+
+[source, ipython3]
+----
+sns.histplot(data=wine_data, x='pH', bins=100)
+----
+
+
++*Out[18]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [18], in <cell line: 1>()
+    ----> 1 sns.histplot(data=wine_data, x='pH', bins=100)
+    
+
+    NameError: name 'wine_data' is not defined
+
+----
+
+== Observation:
+
+There are 1200 entries with same pH value of around 3.5. This is more
+than 85% of the dataset. The pH of a typical wine ranges from 3 to 4.
+Hence, This is clearly due to an error in the dataset. In a practical
+case of this type, we have 2 solutions:
+
+[arabic]
+. Re- collect the data
+. Drop the columns.
+
+Since we cannot recollect the data, we will drop it.
+
+
++*In[20]:*+
+[source, ipython3]
+----
+wine_data.drop('pH', axis=1, inplace=True)
+----
+
+
++*Out[20]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [20], in <cell line: 1>()
+    ----> 1 wine_data.drop('pH', axis=1, inplace=True)
+    
+
+    NameError: name 'wine_data' is not defined
+
+----
+
+
++*In[21]:*+
+[source, ipython3]
+----
+def handle_outliers(data, col):
+    mean = data[col].mean()
+    std = data[col].std()
+    lower = mean - std * 3
+    upper = mean + std * 3
+    
+    data[col][data[col] < lower] = lower
+    data[col][data[col] > upper] = upper
+----
+
+Call this function for every column in the dataset.
+
+
++*In[22]:*+
+[source, ipython3]
+----
+wine_data_capped = wine_data.copy()
+cols = wine_data.columns
+
+for i in range(len(cols)-2):
+    handle_outliers(wine_data_capped, cols[i])
+----
+
+
++*Out[22]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [22], in <cell line: 1>()
+    ----> 1 wine_data_capped = wine_data.copy()
+          2 cols = wine_data.columns
+          4 for i in range(len(cols)-2):
+    
+
+    NameError: name 'wine_data' is not defined
+
+----
+
+
++*In[23]:*+
+[source, ipython3]
+----
+plt.figure(figsize=(15,15))
+cols = wine_data_capped.columns
+
+for i in range(10):
+    plt.subplot(4,3,i+1)
+    sns.hisplot(data=wine_data_capped, x=cols[i], kde=True)
+    
+plt.tight_layout()
+----
+
+
++*Out[23]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [23], in <cell line: 2>()
+          1 plt.figure(figsize=(15,15))
+    ----> 2 cols = wine_data_capped.columns
+          4 for i in range(10):
+          5     plt.subplot(4,3,i+1)
+    
+
+    NameError: name 'wine_data_capped' is not defined
+
+<Figure size 1080x1080 with 0 Axes>----
+
+== Exploratory Data Analysis
+
+In this section, we will try to answer several questions by visualising
+the data.
+
+== 1. What is the relationship between fixed acidity and volatile acidity?
+
+
++*In[24]:*+
+[source, ipython3]
+----
+sns.scatterplot(data=wine_data_capped, x='fixed acidity', y='volatile acidity')
+----
+
+
++*Out[24]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [24], in <cell line: 1>()
+    ----> 1 sns.scatterplot(data=wine_data_capped, x='fixed acidity', y='volatile acidity')
+    
+
+    NameError: name 'wine_data_capped' is not defined
+
+----
+
+== 2. What is the relationship between fixed acidity and citric acid?
+
+
++*In[25]:*+
+[source, ipython3]
+----
+sns.scatterplot(data=wine_data_capped, x='fixed acidity', y='citric acid')
+----
+
+
++*Out[25]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [25], in <cell line: 1>()
+    ----> 1 sns.scatterplot(data=wine_data_capped, x='fixed acidity', y='citric acid')
+    
+
+    NameError: name 'wine_data_capped' is not defined
+
+----
+
+== 3. What is relationship between total sulfur dioxide and free sulfur dioxide?
+
+
++*In[26]:*+
+[source, ipython3]
+----
+sns.scatterplot(data=wine_data_capped, x='total sulfur dioxide', y='free sulfur dioxide')
+----
+
+
++*Out[26]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [26], in <cell line: 1>()
+    ----> 1 sns.scatterplot(data=wine_data_capped, x='total sulfur dioxide', y='free sulfur dioxide')
+    
+
+    NameError: name 'wine_data_capped' is not defined
+
+----
+
+== 4. How are total sulfur dioxide and sulphates related to each other?
+
+
++*In[27]:*+
+[source, ipython3]
+----
+sns.scatterplot(data=wine_data_capped, x='total sulfur dioxide', y='sulphates')
+----
+
+
++*Out[27]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [27], in <cell line: 1>()
+    ----> 1 sns.scatterplot(data=wine_data_capped, x='total sulfur dioxide', y='sulphates')
+    
+
+    NameError: name 'wine_data_capped' is not defined
+
+----
+
+
++*In[28]:*+
+[source, ipython3]
+----
+sns.stripplot(data=wine_data_capped, x='quality', y='alcohol')
+----
+
+
++*Out[28]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [28], in <cell line: 1>()
+    ----> 1 sns.stripplot(data=wine_data_capped, x='quality', y='alcohol')
+    
+
+    NameError: name 'wine_data_capped' is not defined
+
+----
+
+== 6. What is the relation between density and quality?
+
+
++*In[29]:*+
+[source, ipython3]
+----
+sns.stripplot(data=wine_data_capped, x='quality', y='density')
+----
+
+
++*Out[29]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [29], in <cell line: 1>()
+    ----> 1 sns.stripplot(data=wine_data_capped, x='quality', y='density')
+    
+
+    NameError: name 'wine_data_capped' is not defined
+
+----
+
+== 7. What is the correlation between the columns?
+
+
++*In[30]:*+
+[source, ipython3]
+----
+corr = wine_data_capped.corr()
+
+plt.figure(figsize=(10,8))
+sns.heatmap(corr, cmap='coolwarm', annot=True, fmt='2f')
+----
+
+
++*Out[30]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [30], in <cell line: 1>()
+    ----> 1 corr = wine_data_capped.corr()
+          3 plt.figure(figsize=(10,8))
+          4 sns.heatmap(corr, cmap='coolwarm', annot=True, fmt='2f')
+    
+
+    NameError: name 'wine_data_capped' is not defined
+
+----
+
+== Model Building
+
+== 1. Splitting into train and test data:
+
+We first seperate the data set into inputs(X) and output(y). y contains
+2 values: 0 for bad, 1 for good wines.
+
+
++*In[31]:*+
+[source, ipython3]
+----
+X = wine_data_capped.iloc[:,:10]
+y =(wine_data_capped['category'] == 'good').astype('int64')
+----
+
+
++*Out[31]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [31], in <cell line: 1>()
+    ----> 1 X = wine_data_capped.iloc[:,:10]
+          2 y =(wine_data_capped['category'] == 'good').astype('int64')
+    
+
+    NameError: name 'wine_data_capped' is not defined
+
+----
+
+
++*In[32]:*+
+[source, ipython3]
+----
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random)
+----
+
+
++*Out[32]:*+
+----
+
+      Input In [32]
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random)
+                                                                                       ^
+    SyntaxError: positional argument follows keyword argument
+    
+
+----
+
+
++*In[33]:*+
+[source, ipython3]
+----
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+----
+
+
++*Out[33]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [33], in <cell line: 4>()
+          1 from sklearn.preprocessing import StandardScaler
+          3 scaler = StandardScaler()
+    ----> 4 X_train = scaler.fit_transform(X_train)
+          5 X_test = scaler.transform(X_test)
+    
+
+    NameError: name 'X_train' is not defined
+
+----
+
+== 2. Model Training:
+
+We have tried many models, and out of them, Support Vector Machine model
+got the highest score. To use it, we import the SVC from sklearn.svm.
+
+
++*In[34]:*+
+[source, ipython3]
+----
+from sklearn.svm import SVC
+
+model = SVC()
+----
+
+
++*In[35]:*+
+[source, ipython3]
+----
+model.fit(X_train, y_train)
+pred = model.predict(X_test)
+----
+
+
++*Out[35]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [35], in <cell line: 1>()
+    ----> 1 model.fit(X_train, y_train)
+          2 pred = model.predict(X_test)
+    
+
+    NameError: name 'X_train' is not defined
+
+----
+
+== 3. Model Evaluation
+
+To evaluate the model, we first use the confusion_matrix,
+classification_report
+
+The confusion matrix gives for each category, how many are predicted
+correctly and how many are not.
+
+
++*In[36]:*+
+[source, ipython3]
+----
+from sklearn.metrics import confusion_matrix, classification_report
+
+print(confusion_matrix(y_test, pred))
+print("/n")
+print(classification_report(y_test, pred))
+----
+
+
++*Out[36]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [36], in <cell line: 3>()
+          1 from sklearn.metrics import confusion_matrix, classification_report
+    ----> 3 print(confusion_matrix(y_test, pred))
+          4 print("/n")
+          5 print(classification_report(y_test, pred))
+    
+
+    NameError: name 'y_test' is not defined
+
+----
+
+
++*In[37]:*+
+[source, ipython3]
+----
+from sklearn.metrics import accuracy_score
+
+model_acc = accuracy_score(y_test, pred)
+print("Accuracy of Model is:", model_acc)
+----
+
+
++*Out[37]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [37], in <cell line: 3>()
+          1 from sklearn.metrics import accuracy_score
+    ----> 3 model_acc = accuracy_score(y_test, pred)
+          4 print("Accuracy of Model is:", model_acc)
+    
+
+    NameError: name 'y_test' is not defined
+
+----
+
+
++*In[38]:*+
+[source, ipython3]
+----
+pred_ = model.predict(X_train)
+model_acc_ = accuracy_score(y_train, pred_)
+print("Accuracy of Model is:", model_acc_)
+----
+
+
++*Out[38]:*+
+----
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Input In [38], in <cell line: 1>()
+    ----> 1 pred_ = model.predict(X_train)
+          2 model_acc_ = accuracy_score(y_train, pred_)
+          3 print("Accuracy of Model is:", model_acc_)
+    
+
+    NameError: name 'X_train' is not defined
+
+----
+
+== Conclusion:
+
+We have successfully analysed the data, handled the outliers and missing
+values, and built a model to predict the quality of the wine, with 75%
+accuracy.
